@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+Thumbs.db
+coverage/
+*.log
+.codex-meter-cache/
+.vs/
+**/bin/
+**/obj/
+artifacts/
+output/

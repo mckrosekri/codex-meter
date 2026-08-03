@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="CodexMeterTray.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{StaticResource AppBackgroundBrush}">
+    <ScrollViewer>
+        <StackPanel
+            MaxWidth="760"
+            Padding="32,28,32,40"
+            HorizontalAlignment="Center"
+            Spacing="28">
+            <StackPanel Spacing="4">
+                <TextBlock
+                    FontSize="26"
+                    FontWeight="SemiBold"
+                    Foreground="{StaticResource AppTextBrush}"
+                    Text="Settings" />
+                <TextBlock
+                    FontSize="13"
+                    Foreground="{StaticResource AppMutedBrush}"
+                    Text="Local preferences for routing, continuity, notifications, and optional skills."
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <InfoBar
+                x:Name="SettingsInfoBar"
+                IsClosable="True"
+                IsOpen="False"
+                Severity="Error" />
+
+            <StackPanel Spacing="16">
+                <StackPanel Spacing="3">
+                    <TextBlock
+                        FontSize="17"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource AppTextBrush}"
+                        Text="Continuity and routing" />
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="{StaticResource AppMutedBrush}"
+                        Text="Choose how Codex routes new turns and whether task continuity is encrypted on this PC."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+                <ToggleSwitch
+                    x:Name="SecureContinuityToggle"
+                    AutomationProperties.Name="Enable encrypted queue and goal continuity"
+                    Header="Encrypted continuity"
+                    OffContent="Memory only"
+                    OnContent="DPAPI enabled"
+                    Toggled="SecureContinuityToggle_Toggled" />
+                <ComboBox
+                    x:Name="RoutingPolicyCombo"
+                    MaxWidth="420"
+                    HorizontalAlignment="Stretch"
+                    AutomationProperties.Name="Automatic routing policy"
+                    Header="Routing policy"
+                    SelectionChanged="RoutingPolicyCombo_SelectionChanged">
+                    <ComboBoxItem Content="Eco" Tag="eco" />
+                    <ComboBoxItem Content="Balanced" Tag="balanced" />
+                    <ComboBoxItem Content="Quality" Tag="quality" />
+                </ComboBox>
+                <ComboBox
+                    x:Name="NotificationPreferenceCombo"
+                    MaxWidth="420"
+                    HorizontalAlignment="Stretch"
+                    AutomationProperties.Name="Task notifications"
+                    Header="Notifications"
+                    SelectionChanged="NotificationPreferenceCombo_SelectionChanged">
+                    <ComboBoxItem Content="Never" Tag="never" />
+                    <ComboBoxItem Content="Background only" Tag="backgroundOnly" />
+                    <ComboBoxItem Content="Always" Tag="always" />
+                </ComboBox>
+            </StackPanel>
+
+            <Rectangle Height="1" Fill="{StaticResource AppLineBrush}" />
+
+            <StackPanel Spacing="16">
+                <StackPanel Spacing="3">
+                    <TextBlock
+                        FontSize="17"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource AppTextBrush}"
+                        Text="Special skills" />
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="{StaticResource AppMutedBrush}"
+                        Text="Optional prompt helpers applied to new sends and steering messages."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="3">
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource AppTextBrush}"
+                            Text="Prompt Master" />
+                        <TextBlock
+                            x:Name="PromptMasterStatusText"
+                            MaxWidth="560"
+                            FontSize="12"
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Text="Turns rough wording into a precise principal-engineering brief."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <ToggleSwitch
+                        x:Name="PromptMasterToggle"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        AutomationProperties.Name="Enable Prompt Master for OpenAI Codex"
+                        OffContent=""
+                        OnContent=""
+                        Toggled="PromptMasterToggle_Toggled" />
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible problem without sharing private Codex session data.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Web dashboard
+        - Windows tray app
+        - Installer
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Never attach raw .codex session files, prompts, access tokens, or account data.
+      placeholder: Describe the smallest synthetic reproduction.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Windows 11 24H2, Node 24, Codex CLI version
+    validations:
+      required: true

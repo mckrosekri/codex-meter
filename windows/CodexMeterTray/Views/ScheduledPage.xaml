@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="CodexMeterTray.Views.ScheduledPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:CodexMeterTray.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{StaticResource AppBackgroundBrush}"
+    mc:Ignorable="d">
+    <Grid x:Name="PageRoot" Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="CompactScheduledLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PageRoot.Padding" Value="16" />
+                        <Setter Target="HeaderSummaryText.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideScheduledLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PageRoot.Padding" Value="24" />
+                        <Setter Target="HeaderSummaryText.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <CommandBar Background="Transparent" DefaultLabelPosition="Right">
+            <CommandBar.Content>
+                <StackPanel Margin="8,0,20,0" Spacing="2">
+                    <TextBlock FontSize="24" FontWeight="SemiBold" Text="Scheduled" />
+                    <TextBlock
+                        x:Name="HeaderSummaryText"
+                        Foreground="{StaticResource AppMutedBrush}"
+                        Text="Recurring monitors and task follow-ups run while Open Layer is open."
+                        TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </CommandBar.Content>
+            <AppBarButton
+                AutomationProperties.Name="Create monitor"
+                Click="AddMonitor_Click"
+                Icon="Refresh"
+                Label="New monitor" />
+            <AppBarButton
+                AutomationProperties.Name="Create scheduled follow-up"
+                Click="AddFollowUp_Click"
+                Icon="Calendar"
+                Label="New follow-up" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Click="MarkAllRead_Click" Icon="Accept" Label="Mark all runs read" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+
+        <InfoBar
+            x:Name="StatusInfoBar"
+            Grid.Row="1"
+            Margin="0,8,0,8"
+            IsClosable="True"
+            IsOpen="False" />
+
+        <TabView
+            x:Name="ScheduledTabs"
+            Grid.Row="2"
+            AutomationProperties.Name="Scheduled monitors and runs"
+            IsAddTabButtonVisible="False">
+            <TabViewItem Header="Schedules" IsClosable="False">
+                <Grid>
+                    <ListView
+                        x:Name="SchedulesList"
+                        AutomationProperties.Name="Scheduled monitors and follow-ups"
+                        ItemsSource="{x:Bind ScheduledItems, Mode=OneWay}"
+                        SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,10" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:ScheduledTaskView">
+                                <Border
+                                    Padding="14,12"
+                                    Background="{StaticResource AppSurfaceBrush}"
+                                    BorderBrush="{StaticResource AppLineBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                    <Grid RowSpacing="7">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Spacing="4">
+                                            <Grid ColumnSpacing="8">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                                    <Border
+                                                        Grid.Column="0"
+                                                        Padding="7,2"
+                                                        Background="{StaticResource AppElevatedBrush}"
+                                                        CornerRadius="8">
+                                                        <TextBlock
+                                                            FontSize="9"
+                                                            FontWeight="SemiBold"
+                                                            Foreground="{StaticResource AppMutedBrush}"
+                                                            Text="{x:Bind PurposeLabel}" />
+                                                    </Border>
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="15"
+                                                        FontWeight="SemiBold"
+                                                        Text="{x:Bind Name}"
+                                                        TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                            <TextBlock
+                                                Foreground="{StaticResource AppMutedBrush}"
+                                                Text="{x:Bind TargetLabel}"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                        <CommandBar
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Right"
+                                                Background="Transparent"
+                                                DefaultLabelPosition="Collapsed"
+                                                IsDynamicOverflowEnabled="True">
+                                                <AppBarButton Click="RunNow_Click" Icon="Play" Label="Run now" Tag="{x:Bind Id}" />
+                                                <AppBarButton Click="OpenTask_Click" Icon="OpenFile" Label="Open task" Tag="{x:Bind Id}" />
+                                                <AppBarButton Click="EditAutomation_Click" Icon="Edit" Label="Edit" Tag="{x:Bind Id}" />
+                                                <AppBarButton Click="ToggleAutomation_Click" Icon="Pause" Label="{x:Bind ToggleLabel}" Tag="{x:Bind Id}" />
+                                                <CommandBar.SecondaryCommands>
+                                                    <AppBarButton Click="DeleteAutomation_Click" Icon="Delete" Label="Delete" Tag="{x:Bind Id}" />
+                                                </CommandBar.SecondaryCommands>
+                                        </CommandBar>
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Foreground="{StaticResource AppTextBrush}"
+                                            MaxLines="2"
+                                            Text="{x:Bind PromptPreview}"
+                                            TextTrimming="CharacterEllipsis"
+                                            TextWrapping="Wrap" />
+                                        <StackPanel Grid.Row="3" Spacing="2">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{StaticResource AppMutedBrush}"
+                                                Text="{x:Bind ScheduleLabel}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{StaticResource AppMutedBrush}"
+                                                Text="{x:Bind StatusLabel}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackPanel
+                        x:Name="SchedulesEmptyState"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="8">
+                        <FontIcon
+                            HorizontalAlignment="Center"
+                            FontSize="26"
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Glyph="&#xE823;" />
+                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold" Text="Nothing scheduled yet" />
+                        <TextBlock
+                            MaxWidth="420"
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Text="Create a monitor for recurring checks or schedule a follow-up in an existing task."
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </TabViewItem>
+
+            <TabViewItem x:Name="RunsTab" Header="Runs" IsClosable="False">
+                <Grid>
+                    <ListView
+                        x:Name="RunsList"
+                        AutomationProperties.Name="Scheduled run inbox"
+                        ItemsSource="{x:Bind RunItems, Mode=OneWay}"
+                        SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,10" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:AutomationRunView">
+                                <Border
+                                    Padding="14,12"
+                                    Background="{StaticResource AppSurfaceBrush}"
+                                    BorderBrush="{StaticResource AppLineBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                    <Grid ColumnSpacing="12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Ellipse
+                                            Width="8"
+                                            Height="8"
+                                            VerticalAlignment="Top"
+                                            Margin="0,6,0,0"
+                                            Fill="{StaticResource AppPrimaryBrush}"
+                                            Visibility="{x:Bind UnreadVisibility}" />
+                                        <StackPanel Grid.Column="1" Spacing="5">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock FontWeight="SemiBold" Text="{x:Bind Name}" />
+                                                <TextBlock FontSize="11" Foreground="{StaticResource AppMutedBrush}" Text="{x:Bind StatusLabel}" />
+                                            </StackPanel>
+                                            <TextBlock
+                                                Foreground="{StaticResource AppTextBrush}"
+                                                MaxLines="4"
+                                                Text="{x:Bind Summary}"
+                                                TextTrimming="CharacterEllipsis"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock FontSize="10" Foreground="{StaticResource AppFaintBrush}" Text="{x:Bind TimeLabel}" />
+                                        </StackPanel>
+                                        <CommandBar
+                                            Grid.Column="2"
+                                            Background="Transparent"
+                                            DefaultLabelPosition="Collapsed">
+                                            <AppBarButton Click="OpenRun_Click" Icon="OpenFile" Label="Open task" Tag="{x:Bind Id}" />
+                                            <AppBarButton
+                                                Click="MarkRunRead_Click"
+                                                Icon="Accept"
+                                                Label="Mark read"
+                                                Tag="{x:Bind Id}"
+                                                Visibility="{x:Bind UnreadVisibility}" />
+                                        </CommandBar>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackPanel
+                        x:Name="RunsEmptyState"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="8">
+                        <FontIcon
+                            HorizontalAlignment="Center"
+                            FontSize="26"
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Glyph="&#xE9D9;" />
+                        <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold" Text="No runs yet" />
+                        <TextBlock
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Text="Monitor findings and scheduled results will appear here."
+                            TextAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+            </TabViewItem>
+        </TabView>
+    </Grid>
+</Page>

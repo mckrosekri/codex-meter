@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest one focused improvement.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What decision or workflow would this improve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Keep the default experience calm, local-first, and limited to useful data.
+    validations:
+      required: true

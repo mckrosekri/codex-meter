@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="CodexMeterTray.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:CodexMeterTray.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{StaticResource AppBackgroundBrush}"
+    RequestedTheme="Dark"
+    mc:Ignorable="d">
+    <ScrollViewer
+        HorizontalScrollMode="Disabled"
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel
+            MaxWidth="1120"
+            MinWidth="0"
+            Margin="28,24,28,36"
+            HorizontalAlignment="Stretch"
+            Spacing="20">
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Spacing="3">
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource AppTextBrush}"
+                        Text="Usage" />
+                    <TextBlock
+                        x:Name="UpdatedText"
+                        AutomationProperties.LiveSetting="Polite"
+                        FontSize="12"
+                        Foreground="{StaticResource AppMutedBrush}"
+                        Text="Reading local Codex telemetry"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+                <Border
+                    x:Name="PlanChip"
+                    Grid.Column="1"
+                    Padding="10,5"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource AppSurfaceBrush}"
+                    BorderBrush="{StaticResource AppLineBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Visibility="Collapsed">
+                    <TextBlock
+                        x:Name="PlanText"
+                        FontSize="11"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource AppMutedBrush}" />
+                </Border>
+                <Button
+                    x:Name="RefreshButton"
+                    Grid.Column="2"
+                    MinWidth="96"
+                    VerticalAlignment="Center"
+                    AutomationProperties.Name="Refresh all local Codex usage"
+                    Click="RefreshButton_Click"
+                    Content="Refresh"
+                    Style="{StaticResource AccentButtonStyle}" />
+            </Grid>
+
+            <InfoBar
+                x:Name="ErrorInfoBar"
+                IsClosable="True"
+                IsOpen="False"
+                Severity="Error"
+                Title="Usage could not be refreshed" />
+
+            <Border
+                x:Name="IndexingPanel"
+                Padding="14"
+                Background="{StaticResource AppSurfaceBrush}"
+                BorderBrush="{StaticResource AppLineBrush}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Visibility="Collapsed">
+                <Grid RowSpacing="9">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="2">
+                            <TextBlock
+                                x:Name="IndexingTitle"
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource AppTextBrush}" />
+                            <TextBlock
+                                x:Name="IndexingDetail"
+                                AutomationProperties.LiveSetting="Polite"
+                                FontSize="11"
+                                Foreground="{StaticResource AppMutedBrush}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBlock
+                            x:Name="IndexingPercent"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="{StaticResource AppMutedBrush}" />
+                    </Grid>
+                    <ProgressBar
+                        x:Name="IndexingProgress"
+                        Grid.Row="1"
+                        Height="5"
+                        AutomationProperties.Name="Local Codex history indexing progress"
+                        Maximum="100"
+                        Minimum="0" />
+                </Grid>
+            </Border>
+
+            <StackPanel Spacing="3">
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    Foreground="{StaticResource AppTextBrush}"
+                    Text="Current limits" />
+                <TextBlock
+                    FontSize="12"
+                    Foreground="{StaticResource AppMutedBrush}"
+                    Text="Reported directly by Codex. Percentages can include model or speed weighting."
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <Border
+                Background="{StaticResource AppSurfaceBrush}"
+                BorderBrush="{StaticResource AppLineBrush}"
+                BorderThickness="1"
+                CornerRadius="12">
+                <Grid>
+                    <ItemsControl
+                        AutomationProperties.Name="Current Codex usage limits"
+                        ItemsSource="{x:Bind LimitRows, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:UsageLimitView">
+                                <Border
+                                    Padding="18,16"
+                                    BorderBrush="{StaticResource AppLineBrush}"
+                                    BorderThickness="0,0,0,1">
+                                    <StackPanel Spacing="10">
+                                        <Grid ColumnSpacing="16">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Spacing="2">
+                                                <TextBlock
+                                                    FontSize="14"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="{StaticResource AppTextBrush}"
+                                                    Text="{x:Bind Name}" />
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="{StaticResource AppMutedBrush}"
+                                                    Text="{x:Bind WindowLabel}" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" HorizontalAlignment="Right" Spacing="2">
+                                                <TextBlock
+                                                    HorizontalAlignment="Right"
+                                                    FontSize="12"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="{StaticResource AppTextBrush}"
+                                                    Text="{x:Bind ResetRelative}" />
+                                                <TextBlock
+                                                    HorizontalAlignment="Right"
+                                                    FontSize="10"
+                                                    Foreground="{StaticResource AppMutedBrush}"
+                                                    Text="{x:Bind ResetExact}" />
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid ColumnSpacing="12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                FontSize="13"
+                                                FontWeight="SemiBold"
+                                                Foreground="{StaticResource AppTextBrush}"
+                                                Text="{x:Bind UsedText}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                FontSize="11"
+                                                Foreground="{StaticResource AppMutedBrush}"
+                                                Text="{x:Bind RemainingText}" />
+                                        </Grid>
+                                        <ProgressBar
+                                            Height="7"
+                                            AutomationProperties.Name="{x:Bind AccessibleName}"
+                                            Foreground="{x:Bind ProgressBrush}"
+                                            Maximum="100"
+                                            Minimum="0"
+                                            Value="{x:Bind UsedPercent}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <StackPanel
+                        x:Name="LimitsEmptyPanel"
+                        Padding="22"
+                        Spacing="4">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource AppTextBrush}"
+                            Text="No current limit event found" />
+                        <TextBlock
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Text="Run a Codex task, then refresh. Codex records active windows after a model response."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Spacing="3">
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource AppTextBrush}"
+                        Text="Recorded activity" />
+                    <TextBlock
+                        x:Name="ActivityScopeText"
+                        FontSize="12"
+                        Foreground="{StaticResource AppMutedBrush}"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+                <ScrollViewer
+                    Grid.Column="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    HorizontalScrollMode="Enabled"
+                    VerticalScrollMode="Disabled">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <ComboBox
+                            x:Name="CycleCombo"
+                            MinWidth="190"
+                            AutomationProperties.Name="Usage period"
+                            DisplayMemberPath="Label"
+                            SelectionChanged="CycleCombo_SelectionChanged" />
+                        <ComboBox
+                            x:Name="BillingDayCombo"
+                            MinWidth="140"
+                            AutomationProperties.Name="Subscription renewal day"
+                            DisplayMemberPath="Label"
+                            SelectionChanged="BillingDayCombo_SelectionChanged" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Padding="18" Background="{StaticResource AppSurfaceBrush}" BorderBrush="{StaticResource AppLineBrush}" BorderThickness="1" CornerRadius="10,0,0,10">
+                    <StackPanel Spacing="5"><TextBlock Foreground="{StaticResource AppMutedBrush}" Text="Total tokens" TextWrapping="Wrap" /><TextBlock x:Name="TotalTokensText" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="0" /></StackPanel>
+                </Border>
+                <Border Grid.Column="1" Padding="18" Background="{StaticResource AppSurfaceBrush}" BorderBrush="{StaticResource AppLineBrush}" BorderThickness="0,1,1,1">
+                    <StackPanel Spacing="5"><TextBlock Foreground="{StaticResource AppMutedBrush}" Text="Input" TextWrapping="Wrap" /><TextBlock x:Name="InputTokensText" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="0" /></StackPanel>
+                </Border>
+                <Border Grid.Column="2" Padding="18" Background="{StaticResource AppSurfaceBrush}" BorderBrush="{StaticResource AppLineBrush}" BorderThickness="0,1,1,1">
+                    <StackPanel Spacing="5"><TextBlock Foreground="{StaticResource AppMutedBrush}" Text="Output" TextWrapping="Wrap" /><TextBlock x:Name="OutputTokensText" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="0" /></StackPanel>
+                </Border>
+                <Border Grid.Column="3" Padding="18" Background="{StaticResource AppSurfaceBrush}" BorderBrush="{StaticResource AppLineBrush}" BorderThickness="0,1,1,1" CornerRadius="0,10,10,0">
+                    <StackPanel Spacing="5"><TextBlock Foreground="{StaticResource AppMutedBrush}" Text="Model responses" TextWrapping="Wrap" /><TextBlock x:Name="ResponsesText" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="0" /></StackPanel>
+                </Border>
+            </Grid>
+
+            <Border
+                Padding="18"
+                Background="{StaticResource AppSurfaceBrush}"
+                BorderBrush="{StaticResource AppLineBrush}"
+                BorderThickness="1"
+                CornerRadius="10">
+                <Grid ColumnSpacing="18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="3">
+                        <TextBlock Foreground="{StaticResource AppMutedBrush}" Text="API-equivalent estimate" />
+                        <TextBlock x:Name="CostText" FontSize="24" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="$0.00" />
+                        <TextBlock x:Name="CostContextText" FontSize="11" Foreground="{StaticResource AppMutedBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" MaxWidth="390" HorizontalAlignment="Right" Spacing="6">
+                        <ComboBox
+                            x:Name="PricingCombo"
+                            MinWidth="205"
+                            HorizontalAlignment="Right"
+                            AutomationProperties.Name="API pricing basis"
+                            DisplayMemberPath="Label"
+                            SelectionChanged="PricingCombo_SelectionChanged" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            FontSize="10"
+                            Foreground="{StaticResource AppMutedBrush}"
+                            Text="Standard API token rates only. Not your subscription bill; excludes fast mode, tool fees, and long-context uplifts."
+                            TextAlignment="Right"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.6*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+                <Border Padding="18" Background="{StaticResource AppSurfaceBrush}" BorderBrush="{StaticResource AppLineBrush}" BorderThickness="1" CornerRadius="10">
+                    <StackPanel Spacing="14">
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="Tokens by day" />
+                            <TextBlock x:Name="ChartTotalText" Grid.Column="1" FontSize="11" Foreground="{StaticResource AppMutedBrush}" />
+                        </Grid>
+                        <Grid MinHeight="210">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
+                                <ItemsControl
+                                    AutomationProperties.Name="Daily token activity"
+                                    ItemsSource="{x:Bind DailyBars, Mode=OneWay}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="local:UsageBarView">
+                                            <Grid Width="34" Height="205" Margin="2,0">
+                                                <Grid.RowDefinitions><RowDefinition Height="180" /><RowDefinition Height="25" /></Grid.RowDefinitions>
+                                                <Rectangle
+                                                    Width="22"
+                                                    Height="{x:Bind Height}"
+                                                    VerticalAlignment="Bottom"
+                                                    AutomationProperties.Name="{x:Bind AccessibleName}"
+                                                    Fill="{StaticResource AppPrimaryBrush}"
+                                                    RadiusX="3"
+                                                    RadiusY="3"
+                                                    ToolTipService.ToolTip="{x:Bind AccessibleName}" />
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="9"
+                                                    Foreground="{StaticResource AppMutedBrush}"
+                                                    Text="{x:Bind Label}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <TextBlock
+                                x:Name="ChartEmptyText"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource AppMutedBrush}"
+                                Text="No recorded token activity in this period."
+                                Visibility="Collapsed" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Padding="18" Background="{StaticResource AppSurfaceBrush}" BorderBrush="{StaticResource AppLineBrush}" BorderThickness="1" CornerRadius="10">
+                    <StackPanel Spacing="12">
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" Text="Breakdown" />
+                        <Grid RowSpacing="13" ColumnSpacing="14">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Foreground="{StaticResource AppMutedBrush}" Text="Uncached input" /><TextBlock x:Name="UncachedInputText" Grid.Column="1" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" />
+                            <TextBlock Grid.Row="1" Foreground="{StaticResource AppMutedBrush}" Text="Cached input" /><TextBlock x:Name="CachedInputText" Grid.Row="1" Grid.Column="1" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" />
+                            <TextBlock Grid.Row="2" Foreground="{StaticResource AppMutedBrush}" Text="Output" /><TextBlock x:Name="BreakdownOutputText" Grid.Row="2" Grid.Column="1" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" />
+                            <TextBlock Grid.Row="3" Foreground="{StaticResource AppMutedBrush}" Text="Reasoning output (subset)" TextWrapping="Wrap" /><TextBlock x:Name="ReasoningOutputText" Grid.Row="3" Grid.Column="1" FontWeight="SemiBold" Foreground="{StaticResource AppTextBrush}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock
+                    x:Name="PrivacyText"
+                    FontSize="11"
+                    Foreground="{StaticResource AppMutedBrush}"
+                    Text="Local only. Prompt content is never stored or shown."
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="HistoryText"
+                    Grid.Column="1"
+                    FontSize="11"
+                    Foreground="{StaticResource AppMutedBrush}" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

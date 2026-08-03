@@ -1,0 +1,25 @@
+{
+  "name": "codex-meter",
+  "version": "0.5.0",
+  "private": true,
+  "description": "A local-first Codex usage dashboard and Windows decision-layer client.",
+  "homepage": "https://github.com/mckrosekri/codex-meter#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mckrosekri/codex-meter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mckrosekri/codex-meter/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test",
+    "check": "node --check src/server.js && node --check src/usage-store.js && node --check public/app.js && node --check public/cycles.js && node --check public/pricing.js"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "license": "SEE LICENSE IN LICENSE"
+}

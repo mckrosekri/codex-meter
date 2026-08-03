@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#111111" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta
+      name="description"
+      content="A private, local-first dashboard for Codex limits and token usage."
+    />
+    <title>Codex Meter</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to usage</a>
+    <header class="topbar">
+      <div class="brand" aria-label="Codex Meter">
+        <span class="brand-mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span>Codex Meter</span>
+      </div>
+      <div class="topbar-actions">
+        <span class="connection" id="connection-status" role="status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="connection-label">Connecting</span>
+        </span>
+        <button class="button" id="refresh-button" type="button">
+          <span class="refresh-icon" aria-hidden="true">↻</span>
+          Refresh
+        </button>
+      </div>
+    </header>
+
+    <main id="main" class="shell">
+      <div class="page-heading">
+        <div>
+          <h1>Usage</h1>
+          <p id="updated-at">Reading local Codex telemetry…</p>
+        </div>
+        <div class="plan-chip" id="plan-chip" hidden></div>
+      </div>
+
+      <aside class="indexing" id="indexing" aria-live="polite" hidden>
+        <div class="indexing-copy">
+          <strong id="indexing-title">Indexing local history</strong>
+          <span id="indexing-detail">Current limits are already available.</span>
+        </div>
+        <div class="indexing-progress" aria-hidden="true">
+          <span id="indexing-bar"></span>
+        </div>
+      </aside>
+
+      <section class="section" aria-labelledby="limits-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="limits-title">Current limits</h2>
+            <p>Reported directly by Codex. Percentages can include model or speed weighting.</p>
+          </div>
+        </div>
+        <div class="limit-panel" id="limits" aria-live="polite">
+          <div class="skeleton limit-skeleton"></div>
+          <div class="skeleton limit-skeleton"></div>
+        </div>
+      </section>
+
+      <section class="section activity-section" aria-labelledby="activity-title">
+        <div class="section-heading activity-heading">
+          <div>
+            <h2 id="activity-title">Recorded activity</h2>
+            <p id="activity-scope">Calendar month until a renewal day is set.</p>
+          </div>
+          <div class="cycle-controls">
+            <label class="select-field">
+              <span>Usage period</span>
+              <select id="cycle-select"></select>
+            </label>
+            <label class="select-field">
+              <span>Renews on</span>
+              <select id="billing-day-select">
+                <option value="">Not set</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="metric-strip" id="metric-strip" aria-live="polite">
+          <div><span>Total tokens</span><strong>…</strong></div>
+          <div><span>Input</span><strong>…</strong></div>
+          <div><span>Output</span><strong>…</strong></div>
+          <div><span>Model responses</span><strong>…</strong></div>
+        </div>
+
+        <div class="cost-estimate" aria-labelledby="cost-title">
+          <div class="cost-copy">
+            <span id="cost-title">API-equivalent estimate</span>
+            <strong id="cost-value" aria-live="polite">…</strong>
+            <span id="cost-context">Waiting for recorded model data.</span>
+          </div>
+          <div class="cost-controls">
+            <label class="select-field">
+              <span>Pricing basis</span>
+              <select id="pricing-basis-select"></select>
+            </label>
+            <p>
+              Standard API token rates only. Not your subscription bill; excludes fast mode,
+              tool fees, and long-context uplifts.
+              <a href="https://developers.openai.com/api/docs/models/compare" rel="noreferrer">Rates</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="activity-grid">
+          <div class="chart-panel">
+            <div class="panel-heading">
+              <h3>Tokens by day</h3>
+              <span id="chart-total">…</span>
+            </div>
+            <div class="chart" id="activity-chart" role="img" aria-label="Daily token usage chart">
+              <div class="chart-empty">Usage history is loading.</div>
+            </div>
+          </div>
+
+          <div class="breakdown-panel">
+            <div class="panel-heading">
+              <h3>Breakdown</h3>
+              <span>Exact recorded values</span>
+            </div>
+            <dl class="breakdown" id="breakdown">
+              <div><dt>Uncached input</dt><dd>…</dd></div>
+              <div><dt>Cached input</dt><dd>…</dd></div>
+              <div><dt>Output</dt><dd>…</dd></div>
+              <div><dt>Reasoning output <small>subset</small></dt><dd>…</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <footer class="privacy-note">
+        <div>
+          <span class="privacy-icon" aria-hidden="true">●</span>
+          <strong>Local only</strong>
+          <span>Reads token-count events from <code id="source-label">~/.codex</code>. Prompt content is never stored or shown.</span>
+        </div>
+        <span id="history-summary">Waiting for history…</span>
+      </footer>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

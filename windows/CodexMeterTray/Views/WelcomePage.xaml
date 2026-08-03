@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="CodexMeterTray.Views.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{StaticResource AppBackgroundBrush}"
+    mc:Ignorable="d">
+    <Grid Padding="36">
+        <StackPanel
+            MaxWidth="620"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="16">
+            <FontIcon
+                HorizontalAlignment="Left"
+                FontSize="32"
+                Foreground="{StaticResource AppPrimaryBrush}"
+                Glyph="&#xE8B7;" />
+            <TextBlock
+                FontSize="28"
+                FontWeight="SemiBold"
+                Foreground="{StaticResource AppTextBrush}"
+                Text="What would you like to ask?" />
+            <TextBlock
+                FontSize="14"
+                Foreground="{StaticResource AppMutedBrush}"
+                Text="Start a normal Codex chat without choosing a repository. Add a project only when your question or task needs files from a codebase."
+                TextWrapping="Wrap" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button
+                    x:Name="NewQuestionButton"
+                    AutomationProperties.Name="Start a chat without a project"
+                    Click="NewQuestionButton_Click"
+                    Content="Ask a question"
+                    Style="{StaticResource AccentButtonStyle}" />
+                <Button
+                    x:Name="AddProjectButton"
+                    AutomationProperties.Name="Add an optional local project"
+                    Click="AddProjectButton_Click"
+                    Content="Add project" />
+            </StackPanel>
+            <TextBlock
+                FontSize="12"
+                Foreground="{StaticResource AppFaintBrush}"
+                Text="Git is optional. Chat metadata stays local, and Codex remains the source of truth for transcripts."
+                TextWrapping="Wrap" />
+        </StackPanel>
+    </Grid>
+</Page>

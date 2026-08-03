@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application
+    x:Class="CodexMeterTray.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:CodexMeterTray"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <ResourceDictionary Source="TrayIconResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="AppBackgroundBrush" Color="#181818" />
+            <SolidColorBrush x:Key="AppPaneBrush" Color="#231D1D" />
+            <SolidColorBrush x:Key="AppSurfaceBrush" Color="#222222" />
+            <SolidColorBrush x:Key="AppElevatedBrush" Color="#2B2A2A" />
+            <SolidColorBrush x:Key="AppComposerBrush" Color="#262626" />
+            <SolidColorBrush x:Key="AppLineBrush" Color="#363434" />
+            <SolidColorBrush x:Key="AppTextBrush" Color="#F5F3F3" />
+            <SolidColorBrush x:Key="AppMutedBrush" Color="#BBB5B5" />
+            <SolidColorBrush x:Key="AppFaintBrush" Color="#918A8A" />
+            <SolidColorBrush x:Key="AppPrimaryBrush" Color="#F47A64" />
+            <SolidColorBrush x:Key="AppGoodBrush" Color="#62D6A4" />
+            <SolidColorBrush x:Key="AppWarningBrush" Color="#E8B65B" />
+            <SolidColorBrush x:Key="AppDangerBrush" Color="#EC6B6B" />
+            <SolidColorBrush x:Key="GitAdditionLineBrush" Color="#20362A" />
+            <SolidColorBrush x:Key="GitDeletionLineBrush" Color="#3A2527" />
+            <SolidColorBrush x:Key="GitHunkLineBrush" Color="#202E3A" />
+            <SolidColorBrush x:Key="GitHunkTextBrush" Color="#9BC5EA" />
+            <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+                <Setter Property="MinHeight" Value="32" />
+                <Setter Property="Padding" Value="10,4" />
+                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="Background" Value="{StaticResource AppElevatedBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource AppLineBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+            <Style x:Key="EnvironmentRowButtonStyle" TargetType="Button">
+                <Setter Property="MinHeight" Value="40" />
+                <Setter Property="Padding" Value="4,2" />
+                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+            <Style x:Key="ComposerControlStyle" TargetType="Button" BasedOn="{StaticResource ToolbarButtonStyle}">
+                <Setter Property="MinHeight" Value="32" />
+                <Setter Property="Padding" Value="10,4" />
+            </Style>
+            <Style x:Key="ComposerComboBoxStyle" TargetType="ComboBox">
+                <Setter Property="MinHeight" Value="32" />
+                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="Background" Value="{StaticResource AppElevatedBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource AppLineBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

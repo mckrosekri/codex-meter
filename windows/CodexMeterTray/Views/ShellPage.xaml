@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="CodexMeterTray.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{StaticResource AppBackgroundBrush}"
+    mc:Ignorable="d">
+    <NavigationView
+        x:Name="ShellNavigation"
+        AlwaysShowHeader="False"
+        IsBackButtonVisible="Collapsed"
+        CompactPaneLength="48"
+        IsSettingsVisible="False"
+        IsTitleBarAutoPaddingEnabled="True"
+        ItemInvoked="ShellNavigation_ItemInvoked"
+        OpenPaneLength="324"
+        PaneClosing="ShellNavigation_PaneClosing"
+        PaneDisplayMode="LeftCompact"
+        PaneOpened="ShellNavigation_PaneOpened"
+        IsPaneOpen="True">
+        <NavigationView.PaneHeader>
+            <StackPanel x:Name="PaneHeaderContent" Margin="8,8,8,10" Spacing="8">
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="2">
+                        <TextBlock
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource AppTextBrush}"
+                            Text="Codex Decision" />
+                        <TextBlock
+                            x:Name="ConnectionText"
+                            FontSize="10"
+                            Foreground="{StaticResource AppFaintBrush}"
+                            Text="Connecting to local Codex" />
+                    </StackPanel>
+                    <Border
+                        x:Name="ConnectionDot"
+                        Grid.Column="1"
+                        Width="8"
+                        Height="8"
+                        VerticalAlignment="Center"
+                        Background="{StaticResource AppWarningBrush}"
+                        CornerRadius="4" />
+                </Grid>
+                <AutoSuggestBox
+                    x:Name="TaskSearchBox"
+                    AutomationProperties.Name="Search all projects and Codex chats"
+                    PlaceholderText="Search chats"
+                    QueryIcon="Find"
+                    TextChanged="TaskSearchBox_TextChanged" />
+            </StackPanel>
+        </NavigationView.PaneHeader>
+        <NavigationView.MenuItems>
+            <NavigationViewItem
+                x:Name="NewTaskItem"
+                Content="New task"
+                Icon="Add"
+                Tag="new-task" />
+            <NavigationViewItem
+                x:Name="AllChatsItem"
+                Content="All Codex chats"
+                Icon="AllApps"
+                Tag="all-chats" />
+            <NavigationViewItem
+                x:Name="AddProjectItem"
+                Content="Add project"
+                Icon="Folder"
+                Tag="add-project" />
+        </NavigationView.MenuItems>
+        <NavigationView.FooterMenuItems>
+            <NavigationViewItem
+                Content="Settings"
+                Icon="Setting"
+                Tag="settings" />
+            <NavigationViewItem
+                Content="Scheduled"
+                Icon="Calendar"
+                Tag="scheduled" />
+            <NavigationViewItem
+                Content="Integrations"
+                Icon="Link"
+                Tag="integrations" />
+            <NavigationViewItem
+                Content="Usage"
+                Icon="Document"
+                Tag="usage" />
+        </NavigationView.FooterMenuItems>
+        <Grid Background="{StaticResource AppBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <InfoBar
+                x:Name="ConnectionInfoBar"
+                Margin="16,12,16,0"
+                IsClosable="True"
+                IsOpen="False"
+                Severity="Error"
+                Title="Codex connection unavailable" />
+            <Frame x:Name="ContentFrame" Grid.Row="1" />
+        </Grid>
+    </NavigationView>
+</Page>
